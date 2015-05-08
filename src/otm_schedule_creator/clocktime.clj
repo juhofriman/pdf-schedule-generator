@@ -37,15 +37,10 @@
   [[hours minutes]]
   (str (pad-zero-if-needed hours) ":" (pad-zero-if-needed minutes)))
 
-(defn ^:private
-  pad-extra-minutes-to-hours
-  [[h m]]
-  [(rem (+ h (quot m 60)) 24) (rem m 60)])
-
 (defn
   clocktime-add
   [[h m] & {:keys [minutes hours]
             :or { minutes 0 hours 0}}]
-    (pad-extra-minutes-to-hours [(+ h hours) (+ m minutes)]))
-
+    (let [rawh (+ h hours)  rawm(+ m minutes)]
+      [(rem (+ rawh (quot rawm 60)) 24) (rem rawm 60)]))
 
