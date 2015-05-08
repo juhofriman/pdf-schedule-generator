@@ -6,4 +6,5 @@
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [clj-pdf "2.0.3"]
                  [org.clojure/tools.cli "0.3.1"]]
-  :main otm-schedule-creator.core)
+  :main otm-schedule-creator.core
+  :repl-options {:init-ns otm-schedule-creator.clocktime})

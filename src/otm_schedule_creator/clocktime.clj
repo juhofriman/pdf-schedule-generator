@@ -19,8 +19,6 @@
       (string/join (rest a))
       (string/join a))))
 
-(remove-preceeding-zero "02")
-
 (defn
   str-to-clocktime
   [s]
@@ -39,10 +37,15 @@
   [[hours minutes]]
   (str (pad-zero-if-needed hours) ":" (pad-zero-if-needed minutes)))
 
+(defn ^:private
+  pad-extra-minutes-to-hours
+  [[h m]]
+  [(rem (+ h (quot m 60)) 24) (rem m 60)])
+
 (defn
   clocktime-add
   [[h m] & {:keys [minutes hours]
             :or { minutes 0 hours 0}}]
-    [(+ h hours) (+ m minutes)])
+    (pad-extra-minutes-to-hours [(+ h hours) (+ m minutes)]))
 
 

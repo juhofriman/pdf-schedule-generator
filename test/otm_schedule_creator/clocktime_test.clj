@@ -46,9 +46,14 @@
     (is (= (str-to-clocktime "14:05")
            (clocktime-add (str-to-clocktime "13:00") :hours 1 :minutes 5))))
 
-  ; This must be implemented
-  ;(testing "Testing minute overflow"
-  ;  (is (= (str-to-clocktime "14:05")
-  ;         (clocktime-add (str-to-clocktime "13:00") :minutes 65))))
-  )
+  (testing "Testing minute overflow"
+    (is (= (str-to-clocktime "14:05")
+           (clocktime-add (str-to-clocktime "13:00") :minutes 65)))
+    (is (= (str-to-clocktime "14:05")
+           (clocktime-add (str-to-clocktime "13:00") :hours 1 :minutes 5)))
+    (is (= (str-to-clocktime "14:00")
+           (clocktime-add (str-to-clocktime "13:00") :minutes 60))))
+  (testing "Testing hour overflow"
+    (is (= (str-to-clocktime "00:15")
+           (clocktime-add (str-to-clocktime "23:15") :hours 1)))))
 
