@@ -1,6 +1,8 @@
 (ns otm-schedule-creator.core
   (:gen-class)
-  (:require [clojure.tools.cli :refer [parse-opts]])
+  (:require [clojure.tools.cli :refer [parse-opts]]
+            [otm-schedule-creator.pdf :refer :all]
+            [otm-schedule-creator.clocktime :refer :all])
   (:use clj-pdf.core))
 
 (def cli-options
@@ -24,33 +26,17 @@
       (println n))))
 
 
-(defn create-pdf [header date location events filename]
-  (pdf
-    [{}
-     [:heading (str header " " date)]
-     [:line]
-     [:spacer]
-     [:paragraph location]
-     [:spacer]
-     [:spacer]
-     (into [:table { :border false :cell-border false :widths [20 80]}]
-           (for [e events]
-             [[:cell [:chunk {:style :bold} (:time e)]]
-              [:cell (:text e)]]))]
-    filename))
-
-
-
 (defn generate-raport [[date] opts]
-  (create-pdf
-   "OTM-työtä Helsingissä"
-   date
-   "Arkadiankatu 28"
-   [{:time (:starttime opts) :text "Lähtö kotoa ja junamatka Helsinkiin"}
-    {:time "10-12" :text "Saapuminen Arkadiankadulle. Työskentelyä."}
-    {:time "12-12:30" :text "Omakustanteinen lounas"}
-    {:time "12:30-16" :text "Työskentelyä"}
-    {:time (:endtime opts) :text "Junamatka Tampereelle"}]
+  (materialize-pdf
+   (create-schedule-representation
+     :header "OTM-työtä Helsingissä"
+     :date date
+     :location "Arkadiankatu 28"
+     :eventsvec [{:time (:starttime opts) :text "Lähtö kotoa ja junamatka Helsinkiin"}
+      {:time "10-12" :text "Saapuminen Arkadiankadulle. Työskentelyä."}
+      {:time "12-12:30" :text "Omakustanteinen lounas"}
+      {:time "12:30-16" :text "Työskentelyä"}
+      {:time (:endtime opts) :text "Junamatka Tampereelle"}])
    (:file opts)))
 
 (defn -main [& args]
